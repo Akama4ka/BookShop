@@ -1,12 +1,14 @@
-#include "User.h"
 #include<iostream>
 #include<fstream>
 #include<string>
 using namespace std;
+#include "User.h"
+
+
 bool User::LoginandPaasword() {
-	string username, password, un, ps;
-	cout << "Ваш Логин" << " "; cin >> username;
-	cout << "Ваш пароль" << " "; cin >> password;
+	string un, ps;
+	cout << "Логин" << " "; cin >> username;
+	cout << "Пароль" << " "; cin >> password;
 	ifstream read(username + ".txt");
 	getline(read, un);
 	getline(read, ps);
@@ -17,11 +19,22 @@ bool User::LoginandPaasword() {
 	   return false;
 }
 void User::Registor() {
-	string username, password;
 	cout << "Введите ваш логин" << " "; cin >> username;
-	cout << "Введите ваш пароль" << " "; cin >> password;
-	ofstream file;
-	file.open(username + ".txt");
-	file << username << endl<< password;
-	file.close();
+	if (searchUser(username + ".txt") == false) {
+		cout << "Введите ваш пароль" << " "; cin >> password;
+		ofstream file;
+		file.open(username + ".txt");
+		file << username << endl << password;
+		file.close();
+	}
+	else if (searchUser(username+".txt") == true)
+		cout << "Пользователь с данным логином уже существует" << endl;
+}
+bool User::searchUser(std::string filePath) {
+		bool isExist = false;
+		std::ifstream fin(filePath.c_str());
+		if (fin.is_open())
+			isExist = true;
+		fin.close();
+		return isExist;
 }
